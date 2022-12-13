@@ -7,17 +7,18 @@ module DSN_FSM_tb;
   wire    		          spike;
   wire     [12:0]    	 vfire;
   wire   		       fullflag;
-  wire  		[7:0] cyclecounter;
+  wire  		[7:0] 	  counter;
+  wire     [12:0]        vleak;
 
 	
 	
-	DSN_FSM dut(.clock(clock), .reset(reset), .vpre(vpre), .leak(leak), .vth(vth), .spike(spike), .vfire(vfire), .fullflag(fullflag), .cyclecounter(cyclecounter));
+	DSN_FSM dsn(.clock(clock), .reset(reset), .vpre(vpre), .leak(leak), .vth(vth), .spike(spike), .vfire(vfire), .fullflag(fullflag), .counter(counter), .vleak(vleak));
 		
 		
 	initial begin
 		clock <=   0;
-	   reset <=   0;
-		vpre <= 8'd0;
+	   reset <=   1;
+		vpre <= 8'd32;
 		leak <= 8'd0;
 		vth <= 13'd0;
 	end
@@ -33,31 +34,33 @@ module DSN_FSM_tb;
 		end
 	end
 		
-	assign state = dut.state; // idk if i need this
-	assign next_state = dut.next_state; // idk if i need this
+	//assign state = dsn.state; // idk if i need this
+	//assign next_state = dsn.next_state; // idk if i need this
 		
 	always begin
+		#40
+		reset <= 0;
 		vth <= 13'b0000000100000; // 32
 		leak <= 8'b00000010; // 2
 		#180
-		vpre <= 8'd32;
+		//vpre <= 8'd32;
 		#90
 		reset <= 1;
 		#180
 		reset <= 0;
-		vpre <= 8'd32;
+		vpre <= 8'd16;
 		#80;
-		/*
-		vpre <= 8'd0;
-		#80
-		vpre <= 8'd64;
-		#80
-		vpre <= 8'd0;
-		#80
-		vpre <= 8'd128;
-		#80
-		vpre <= 8'd0;
-		*/
+		
+		//vpre <= 8'd0;
+		//#80
+		//vpre <= 8'd64;
+		//#80
+		//vpre <= 8'd0;
+		//#80
+		//vpre <= 8'd128;
+		//#80
+		//vpre <= 8'd0;
+		
 	
 	
 	end
